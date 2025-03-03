@@ -1,36 +1,95 @@
-"""
-This module loads the S&P 500 index, Dividend yields, and all active futures during 
-the given period from Bloomberg. 
-
-You must have a Bloomberg terminal open on this computer to run. You must
-first install xbbg
-"""
-
 import pandas as pd
-import settings
-from pathlib import Path
+from xbbg import blp
+import numpy as np
+from datetime import timedelta
+import os
 
-DATA_DIR = settings.DATA_DIR
-START_DATE = settings.START_DATE
-END_DATE = settings.END_DATE
+data_dir = '../data'
 
-def pull_bbg_data(end_date=END_DATE):
+def pull_raw_tyields(override_download = False):
+    file_dir = data_dir + '/bbg'
+    file = file_dir + '/raw_tyields.pkl'
+    if os.path.exists(file) and not override_download:
+        print('Loading local treasury yield data.')
+        df = pd.read_pickle(file)
+    else:
+        print('Fetching treasury yield data from Bloomberg')
+        TODAY = pd.to_datetime('today').normalize() - timedelta(days=1)
+        months = [1, 2, 3, 6, 12]
+        years = [2, 3, 5, 7, 10, 20, 30]
+        t_list = [f'GB{x} Govt' for x in months] + [f'GT{x} Govt' for x in years]
+        try:
+            df = blp.bdh(
+                tickers = t_list,
+                flds = ['PX_LAST',],
+                start_date = '2000-01-01',
+                end_date = TODAY
+            )
+        except Exception as e:
+            print(f'Failed Bloomberg data pull.  See error below.')
+            raise e
+        df = df.rename(columns = {'GB12 Govt': 'GT1 Govt'})
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
+        df.to_pickle(file)
+    return df
+
+def pull_raw_syields(override_download = False):
+    file_dir = data_dir + '/bbg'
+    file = file_dir + '/raw_syields.pkl'
+    if os.path.exists(file) and not override_download:
+        print('Loading local swap yield data.')
+        df = pd.read_pickle(file)
+    else:
+        print('Fetching swap yield data from Bloomberg')
+        TODAY = pd.to_datetime('today').normalize() - timedelta(days=1)
+        years = [1, 2, 3, 5, 10, 20, 30]
+        swap_list = [f'USSO{x} CMPN Curncy' for x in years]
+        try:
+            df = blp.bdh(
+                tickers = swap_list,
+                flds = ['PX_LAST',],
+                start_date = '2000-01-01',
+                end_date = TODAY
+            )
+        except Exception as e:
+            print(f'Failed Bloomberg data pull.  See error below.')
+            raise e
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
+        df.to_pickle(file)
+    return df
+
+def clean_raw_tyields(raw_df, override = False):
+    file_dir = data_dir + '/bbg'
+    file = file_dir + '/tyields.pkl'
+    if os.path.exists(file) and not override:
+        print('Loading local cleaned treasury yield data.')
+        df = pd.read_pickle(file)
+    else:
+        df = raw_df.apply(pd.to_numeric, errors = 'coerce')
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
+        df.to_pickle(file)
+    return df
+
+def clean_raw_syields(raw_df, override = False):
+    file_dir = data_dir + '/bbg'
+    file = file_dir + '/syields.pkl'
+    if os.path.exists(file) and not override:
+        print('Loading local cleaned swap yield data.')
+        df = pd.read_pickle(file)
+    else:
+        df = raw_df.apply(pd.to_numeric, errors = 'coerce')
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
+        df.to_pickle(file)
+    return df
+
+if __name__ == '__main__':
+    raw_tyields = pull_raw_tyields()
+    tyields = clean_raw_tyields(raw_tyields)
+
+    raw_syields = pull_raw_syields()
+    syields = clean_raw_syields(raw_syields)
     
-    bbg_df = pd.DataFrame()
-    bbg_df['dividend yield'] = blp.bdh("SPX Index","EQY_DVD_YLD_12m", START_DATE, end_date)[("SPX Index","EQY_DVD_YLD_12m")]
-    
-    bbg_df['index'] = blp.bdh("SPX Index","px_last", START_DATE, end_date)[("SPX Index","px_last")]
-    
-    bbg_df['futures'] = pd.concat([blp.bdh("SP1 Index","px_last", START_DATE, "1997-08-31")[("SP1 Index","px_last")],
-                                    blp.bdh("ES1 Index","px_last", "1997-09-30", end_date)[("ES1 Index","px_last")]])
-    
-    bbg_df.index.name = 'Date'
-
-    return bbg_df
-
-
-if __name__ == "__main__":
-    from xbbg import blp
-    df = pull_bbg_data(end_date=END_DATE)
-    path = Path(DATA_DIR) / "bloomberg.parquet"
-    df.to_parquet(path)
