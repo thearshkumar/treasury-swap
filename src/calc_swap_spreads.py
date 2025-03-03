@@ -5,7 +5,16 @@ import matplotlib.pyplot as plt
 output_dir = '../_output'
 
 def calc_swap_spreads():
+    """[Summary]
 
+    :param [ParamName]: [ParamDescription], defaults to [DefaultParamVal]
+    :type [ParamName]: [ParamType](, optional)
+    ...
+    :raises [ErrorType]: [ErrorDescription]
+    ...
+    :return: [ReturnDescription]
+    :rtype: [ReturnType]
+    """
     raw_syields = pull_raw_syields()
     swap_df = clean_raw_syields(raw_syields)
 
@@ -38,30 +47,56 @@ def calc_swap_spreads():
 
     return merged_df
 
-if __name__ == '__main__':
-    arb_df = calc_swap_spreads()
-    years = [1,2,3,5,10,20,30]
+def plot_figure(arb_df, savePath, end=None):
+    """This function is responsible for displaying and saving the plot 
+    generated using the data provided.
+
+    :param arb_df: DataFrame containing the arbitrage calculations per year
+    :type arb_df: pd.DataFrame
+    :param savePath: Path for saving the plot
+    :type savePath: str
+    :param end: end date for the plot, defaults to None which then means using 
+    the last date in arb_df
+    :type end: pd.Timestamp
+
+    :return: Doesn't return
+    :rtype: void
+    """
     start = pd.Timestamp('2010-01-01').date()
-    end = pd.Timestamp('2020-03-01').date()
+    for year in [1,2,3,5,10,20,30]:
+        label = f'{year}Y'
+        if end:
+            plt.plot(arb_df[f'Arb_Swap_{year}'].loc[start:end].dropna(), label = label)
+        else:
+            plt.plot(arb_df[f'Arb_Swap_{year}'].loc[start:].dropna(), label = label)
+    plt.title('Treasury-Swap')
+    plt.xlabel('Dates')
+    plt.ylabel('Arbitrage Spread (bps)')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=5)
+    plt.grid(axis = 'y')
+    plt.savefig(savePath)
+    plt.show()
+
+def swap_main():
+    """[Summary]
+
+    :param [ParamName]: [ParamDescription], defaults to [DefaultParamVal]
+    :type [ParamName]: [ParamType](, optional)
+    ...
+    :raises [ErrorType]: [ErrorDescription]
+    ...
+    :return: [ReturnDescription]
+    :rtype: [ReturnType]
+    """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    for year in years:
-        label = f'{year}Y'
-        plt.plot(arb_df[f'Arb_Swap_{year}'].loc[start:end].dropna(), label = label)
-    plt.title('Treasury-Swap')
-    plt.xlabel('Dates')
-    plt.ylabel('Arbitrage Spread (bps)')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=5)
-    plt.grid(axis = 'y')
-    plt.savefig(output_dir + '/replicated_swap_spread_arb_figure.png')
-    plt.show()
-    for year in years:
-        label = f'{year}Y'
-        plt.plot(arb_df[f'Arb_Swap_{year}'].loc[start:].dropna(), label = label)
-    plt.title('Treasury-Swap')
-    plt.xlabel('Dates')
-    plt.ylabel('Arbitrage Spread (bps)')
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=5)
-    plt.grid(axis = 'y')
-    plt.savefig(output_dir + '/updated_swap_spread_arb_figure.png')
-    plt.show()
+    
+    arb_df = calc_swap_spreads()
+    end = pd.Timestamp('2020-03-01').date()
+
+    plot_figure(arb_df, output_dir + '/replicated_swap_spread_arb_figure.png', end)
+
+    plot_figure(arb_df, output_dir + '/updated_swap_spread_arb_figure.png')
+
+if __name__ == '__main__':
+    swap_main()
