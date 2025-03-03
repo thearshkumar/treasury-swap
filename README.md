@@ -1,9 +1,10 @@
-Example Project Using the ChartBook Template
+Replicating Treasury Swap Figure from Segmented Arbitrage
 =============================================
 
 ## About this project
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We, Arsh and Mark, present a pipeline-based project which
+replicates the treasury swap figure from the paper, [Segmented Arbitrage](https://www.hbs.edu/faculty/Pages/item.aspx?num=65867).
 
 ## Quick Start
 
