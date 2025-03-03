@@ -1,3 +1,8 @@
+"""
+Responsible for calculating the spreads, and displaying and saving the 
+replicated and current plots.
+"""
+
 import pandas as pd
 from pull_bloomberg import *
 import matplotlib.pyplot as plt
@@ -5,15 +10,10 @@ import matplotlib.pyplot as plt
 output_dir = '../_output'
 
 def calc_swap_spreads():
-    """[Summary]
+    """Combines the treasury and swap data and calculates the spreads
 
-    :param [ParamName]: [ParamDescription], defaults to [DefaultParamVal]
-    :type [ParamName]: [ParamType](, optional)
-    ...
-    :raises [ErrorType]: [ErrorDescription]
-    ...
-    :return: [ReturnDescription]
-    :rtype: [ReturnType]
+    :return: The merged data frame containing the clean and calculated data
+    :rtype: pd.DataFrame
     """
     raw_syields = pull_raw_syields()
     swap_df = clean_raw_syields(raw_syields)
@@ -48,8 +48,7 @@ def calc_swap_spreads():
     return merged_df
 
 def plot_figure(arb_df, savePath, end=None):
-    """This function is responsible for displaying and saving the plot 
-    generated using the data provided.
+    """Displaying and saving the plot generated using the data provided.
 
     :param arb_df: DataFrame containing the arbitrage calculations per year
     :type arb_df: pd.DataFrame
@@ -59,8 +58,7 @@ def plot_figure(arb_df, savePath, end=None):
     the last date in arb_df
     :type end: pd.Timestamp
 
-    :return: Doesn't return
-    :rtype: void
+    :return: void
     """
     start = pd.Timestamp('2010-01-01').date()
     for year in [1,2,3,5,10,20,30]:
@@ -78,15 +76,7 @@ def plot_figure(arb_df, savePath, end=None):
     plt.show()
 
 def swap_main():
-    """[Summary]
-
-    :param [ParamName]: [ParamDescription], defaults to [DefaultParamVal]
-    :type [ParamName]: [ParamType](, optional)
-    ...
-    :raises [ErrorType]: [ErrorDescription]
-    ...
-    :return: [ReturnDescription]
-    :rtype: [ReturnType]
+    """Main function that displays and saves the replicated and updated plots
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
