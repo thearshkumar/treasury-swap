@@ -1,12 +1,24 @@
+"""
+Pulls data from Bloomberg or local files. Cleans if required.
+"""
+
 import pandas as pd
 from xbbg import blp
 import numpy as np
 from datetime import timedelta
 import os
 
-data_dir = '../data'
+data_dir = '../_data'
 
 def pull_raw_tyields(override_download = False):
+    """Pull raw treasury yield data
+
+    :param override_download: If set to True, downloaded data is ignored
+    :type override_download: bool, default = False
+
+    :return: Raw treasury yield data
+    :rtype: pd.DataFrame
+    """
     file_dir = data_dir + '/bbg'
     file = file_dir + '/raw_tyields.pkl'
     if os.path.exists(file) and not override_download:
@@ -35,6 +47,14 @@ def pull_raw_tyields(override_download = False):
     return df
 
 def pull_raw_syields(override_download = False):
+    """Pull raw swap yield data
+
+    :param override_download: If set to True, downloaded data is ignored
+    :type override_download: bool, default = False
+    
+    :return: Raw swap yield data
+    :rtype: pd.DataFrame
+    """
     file_dir = data_dir + '/bbg'
     file = file_dir + '/raw_syields.pkl'
     if os.path.exists(file) and not override_download:
@@ -61,6 +81,16 @@ def pull_raw_syields(override_download = False):
     return df
 
 def clean_raw_tyields(raw_df, override = False):
+    """Cleans treasury yield data
+
+    :param raw_df: Data Frame to clean
+    :type raw_df: pd.DataFrame
+    :param override: If set to True, downloaded data is ignored
+    :type override: bool, default = False
+
+    :return: Cleaned treasury yield data frame
+    :rtype: pd.DataFrame
+    """
     file_dir = data_dir + '/bbg'
     file = file_dir + '/tyields.pkl'
     if os.path.exists(file) and not override:
@@ -74,6 +104,16 @@ def clean_raw_tyields(raw_df, override = False):
     return df
 
 def clean_raw_syields(raw_df, override = False):
+    """Cleans swap yield data
+
+    :param raw_df: Data Frame to clean
+    :type raw_df: pd.DataFrame
+    :param override: If set to True, downloaded data is ignored
+    :type override: bool, default = False
+
+    :return: Cleaned swap yield data frame
+    :rtype: pd.DataFrame
+    """
     file_dir = data_dir + '/bbg'
     file = file_dir + '/syields.pkl'
     if os.path.exists(file) and not override:
@@ -86,10 +126,14 @@ def clean_raw_syields(raw_df, override = False):
         df.to_pickle(file)
     return df
 
-if __name__ == '__main__':
+def bloom_main():
+    """Main function which pulls data and cleans it
+    """
     raw_tyields = pull_raw_tyields()
     tyields = clean_raw_tyields(raw_tyields)
 
     raw_syields = pull_raw_syields()
     syields = clean_raw_syields(raw_syields)
-    
+
+if __name__ == '__main__':
+    bloom_main()
