@@ -27,7 +27,7 @@ def pull_raw_tyields(override_download = False):
     else:
         print('Fetching treasury yield data from Bloomberg')
         TODAY = pd.to_datetime('today').normalize() - timedelta(days=1)
-        months = [1, 2, 3, 6, 12]
+        months = [x for x in range(1, 13)]
         years = [2, 3, 5, 7, 10, 20, 30]
         t_list = [f'GB{x} Govt' for x in months] + [f'GT{x} Govt' for x in years]
         try:

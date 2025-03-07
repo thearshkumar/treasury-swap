@@ -15,6 +15,8 @@ def test_pull_raw_syields():
 def test_clean_raw_tyields():
     """TODO: Could pass dummy data and assert if changed
     """
+    # Check that all are numeric, check that length is same as input
+    # check column names
     pass
 def test_clean_raw_syields():
     """TODO: Could pass dummy data and assert if changed

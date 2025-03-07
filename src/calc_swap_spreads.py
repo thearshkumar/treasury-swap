@@ -61,7 +61,7 @@ def plot_figure(arb_df, savePath, end=None):
     :return: void
     """
     start = pd.Timestamp('2010-01-01').date()
-    for year in [1,2,3,5,10,20,30]:
+    for year in [1,20,2,30,3,5,10]:
         label = f'{year}Y'
         if end:
             plt.plot(arb_df[f'Arb_Swap_{year}'].loc[start:end].dropna(), label = label)
@@ -72,8 +72,8 @@ def plot_figure(arb_df, savePath, end=None):
     plt.ylabel('Arbitrage Spread (bps)')
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=5)
     plt.grid(axis = 'y')
-    plt.savefig(savePath)
-    plt.show()
+    plt.savefig(savePath, bbox_inches='tight')
+    plt.close()
 
 def swap_main():
     """Main function that displays and saves the replicated and updated plots
@@ -82,11 +82,18 @@ def swap_main():
         os.makedirs(output_dir)
     
     arb_df = calc_swap_spreads()
-    end = pd.Timestamp('2020-03-01').date()
+    end = pd.Timestamp('2024-02-28').date()
 
     plot_figure(arb_df, output_dir + '/replicated_swap_spread_arb_figure.png', end)
 
     plot_figure(arb_df, output_dir + '/updated_swap_spread_arb_figure.png')
+
+    print("Dimensions: ")
+    print(arb_df.shape)
+    print("First valid date: ")
+    print(arb_df.first_valid_index())
+    print("Last valid date: ")
+    print(arb_df.last_valid_index())
 
 if __name__ == '__main__':
     swap_main()
