@@ -3,7 +3,7 @@ Tests functions in calc_swap_spreads responsible for calculation and plots.
 """
 import pandas as pd
 from datetime import datetime, timedelta
-import calc_swap_spreads
+from calc_swap_spreads import *
 from pull_bloomberg import *
 
 def test_calc_swap_spreads():
@@ -32,14 +32,12 @@ def test_calc_swap_spreads():
         assert (output[f'tswap_{year}_rf'] == swap_df[f'USSO{year} CMPN Curncy'] * 100).all()
         assert (output['year'] == pd.to_datetime(output.index).year).all()
 
-def test_plot_figure():
-    """TODO: could check if two plots are identical based on the rgb values
-    """
-    # Test with dummy plot, and check if it saves the correct name in the dir
-    pass
 def test_swap_main():
-    """TODO: Tests swap_main to check if it saves the correct files in the correct
+    """Tests swap_main to check if it saves the correct files in the correct
     destination
+    Note: It only passes when connected to a bloomberg-enabled machine
     """
-    # Checking the actual plots if they are being saved
-    pass
+    swap_main()
+    file_dir = os.path.join(data_dir , 'calc_spread')
+    file = os.path.join(file_dir, 'calc_merged.pkl')
+    assert os.path.exists(file)

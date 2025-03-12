@@ -5,8 +5,10 @@ import pandas as pd
 import os
 import pull_bloomberg
 import numpy as np
+from pathlib import Path
+from settings import config
 
-data_dir = '../_data'
+data_dir = Path(config("DATA_DIR"))
 
 def test_pull_raw_tyields():
     """Checking if column names are correct
@@ -18,8 +20,8 @@ def test_pull_raw_tyields():
     df = pull_bloomberg.pull_raw_tyields()
     assert df.columns == t_list
     
-    file_dir = data_dir + '/bbg'
-    file = file_dir + '/raw_syields.pkl'
+    file_dir = os.path.join(data_dir, 'bbg')
+    file = os.path.join(file_dir, 'raw_syields.pkl')
     assert os.path.exists(file)
 
 def test_pull_raw_syields():
