@@ -14,14 +14,15 @@ def test_pull_raw_tyields():
     """Checking if column names are correct
     and if raw data file is properly created
     """
-    months = [x for x in range(1, 12)]
+    months = [1, 2, 3, 4, 6]
     years = [1, 2, 3, 5, 7, 10, 20, 30]
     t_list = [f'GB{x} Govt' for x in months] + [f'GT{x} Govt' for x in years]
     df = pull_bloomberg.pull_raw_tyields()
-    assert df.columns == t_list
+    colu = [a for a, _ in df.columns]
+    assert (colu == t_list)
     
     file_dir = os.path.join(data_dir, 'bbg')
-    file = os.path.join(file_dir, 'raw_syields.pkl')
+    file = os.path.join(file_dir, 'raw_tyields.pkl')
     assert os.path.exists(file)
 
 def test_pull_raw_syields():
@@ -31,10 +32,11 @@ def test_pull_raw_syields():
     years = [1, 2, 3, 5, 10, 20, 30]
     swap_list = [f'USSO{x} CMPN Curncy' for x in years]
     df = pull_bloomberg.pull_raw_syields()
-    assert df.columns == swap_list
+    colu = [a for a, _ in df.columns]
+    assert (colu == swap_list)
 
-    file_dir = data_dir + '/bbg'
-    file = file_dir + '/raw_syields.pkl'
+    file_dir = os.path.join(data_dir, 'bbg')
+    file = os.path.join(file_dir, 'raw_syields.pkl')
     assert os.path.exists(file)
 
 def test_clean_raw_tyields():

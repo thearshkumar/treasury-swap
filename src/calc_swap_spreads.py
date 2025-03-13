@@ -32,7 +32,7 @@ def calc_swap_spreads(treasury_df, swap_df):
     arb_list = [f'Arb_Swap_{x}' for x in s_years]
     tswap_list = [f'tswap_{x}_rf' for x in s_years]
     merged_df = merged_df[arb_list + tswap_list]
-    merged_df = merged_df[merged_df.isna().all(axis=1) == False]
+    merged_df = merged_df.dropna(how='all')
 
     return merged_df
 
