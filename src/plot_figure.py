@@ -14,7 +14,6 @@ from calc_swap_spreads import *
 from supplementary import *
 
 output_dir = Path(config("OUTPUT_DIR"))
-# output_dir = '/Users/arshkumar/MyPython/FINM/treasury-swap/_output'
 
 def plot_figure(arb_df, savePath, end=None):
 
@@ -30,7 +29,7 @@ def plot_figure(arb_df, savePath, end=None):
 
     :return: void
     """
-    start = pd.Timestamp('2010-01-01').date()
+    start = pd.Timestamp(config("START_DATE")).date()
     for year in [1,20,2,30,3,5,10]:
         label = f'{year}Y'
         if end:
@@ -81,7 +80,7 @@ def plot_main():
     else:
         t_df, s_df = bloom_main()
         arb_df = calc_swap_spreads(t_df, s_df)
-    end = pd.Timestamp('2024-02-28').date()
+    end = pd.Timestamp(config("END_DATE")).date()
 
     rep_df = supplementary_main()
 

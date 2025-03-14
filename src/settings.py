@@ -72,14 +72,14 @@ d["BASE_DIR"] = Path(__file__).absolute().parent.parent
 ## Other .env variables
 d["START_DATE"] = _config("START_DATE", default="1913-01-01", cast=to_datetime)
 d["END_DATE"] = _config("END_DATE", default="2024-01-01", cast=to_datetime)
-d["PIPELINE_DEV_MODE"] = _config("PIPELINE_DEV_MODE", default=True, cast=bool)
-d["PIPELINE_THEME"] = _config("PIPELINE_THEME", default="pipeline")
+# d["PIPELINE_DEV_MODE"] = _config("PIPELINE_DEV_MODE", default=True, cast=bool)
+# d["PIPELINE_THEME"] = _config("PIPELINE_THEME", default="pipeline")
 
 ## Paths
 d["DATA_DIR"] = if_relative_make_abs(_config('DATA_DIR', default=Path('_data'), cast=Path))
-d["MANUAL_DATA_DIR"] = if_relative_make_abs(_config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
+# d["MANUAL_DATA_DIR"] = if_relative_make_abs(_config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
 d["OUTPUT_DIR"] = if_relative_make_abs(_config('OUTPUT_DIR', default=Path('_output'), cast=Path))
-d["PUBLISH_DIR"] = if_relative_make_abs(_config('PUBLISH_DIR', default=Path('_output/publish'), cast=Path))
+# d["PUBLISH_DIR"] = if_relative_make_abs(_config('PUBLISH_DIR', default=Path('_output/publish'), cast=Path))
 # fmt: on
 
 
@@ -121,7 +121,6 @@ def create_dirs():
     ## If they don't exist, create the _data and _output directories
     d["DATA_DIR"].mkdir(parents=True, exist_ok=True)
     d["OUTPUT_DIR"].mkdir(parents=True, exist_ok=True)
-    # (d["BASE_DIR"] / "_docs").mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":

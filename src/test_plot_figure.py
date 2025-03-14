@@ -8,7 +8,7 @@ def test_plot_figure():
     # Create dict for DataFrame
     arb_df = {}
     col = []
-    start = pd.Timestamp('2010-01-01').date()
+    start = pd.Timestamp(config("START_DATE")).date()
     arb_df[start] = [x for x in range(7)]
     arb_df[pd.Timestamp('2010-02-01').date()] = [x for x in range(7, 14)]
     for year in [1,20,2,30,3,5,10]:

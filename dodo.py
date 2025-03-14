@@ -63,11 +63,11 @@ init(autoreset=True)
 
 BASE_DIR = config("BASE_DIR")
 DATA_DIR = config("DATA_DIR")
-MANUAL_DATA_DIR = config("MANUAL_DATA_DIR")
+# MANUAL_DATA_DIR = config("MANUAL_DATA_DIR")
 OUTPUT_DIR = config("OUTPUT_DIR")
-OS_TYPE = config("OS_TYPE")
-PUBLISH_DIR = config("PUBLISH_DIR")
-USER = config("USER")
+# OS_TYPE = config("OS_TYPE")
+# PUBLISH_DIR = config("PUBLISH_DIR")
+# USER = config("USER")
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
@@ -236,84 +236,84 @@ def task_example_plot():
 #     }
 
 
-notebook_tasks = {
-    "01_example_notebook_interactive.ipynb": {
-        "file_dep": [],
-        "targets": [],
-    },
-    "02_example_with_dependencies.ipynb": {
-        "file_dep": ["./src/pull_fred.py"],
-        "targets": [Path(OUTPUT_DIR) / "GDP_graph.png"],
-    },
-    "03_public_repo_summary_charts.ipynb": {
-        "file_dep": [
-            "./src/pull_fred.py",
-            "./src/pull_ofr_api_data.py",
-            "./src/pull_public_repo_data.py",
-        ],
-        "targets": [
-            OUTPUT_DIR / "repo_rate_spikes_and_relative_reserves_levels.png",
-            OUTPUT_DIR / "rates_relative_to_midpoint.png",
-        ],
-    },
-}
+# notebook_tasks = {
+#     "01_example_notebook_interactive.ipynb": {
+#         "file_dep": [],
+#         "targets": [],
+#     },
+#     "02_example_with_dependencies.ipynb": {
+#         "file_dep": ["./src/pull_fred.py"],
+#         "targets": [Path(OUTPUT_DIR) / "GDP_graph.png"],
+#     },
+#     "03_public_repo_summary_charts.ipynb": {
+#         "file_dep": [
+#             "./src/pull_fred.py",
+#             "./src/pull_ofr_api_data.py",
+#             "./src/pull_public_repo_data.py",
+#         ],
+#         "targets": [
+#             OUTPUT_DIR / "repo_rate_spikes_and_relative_reserves_levels.png",
+#             OUTPUT_DIR / "rates_relative_to_midpoint.png",
+#         ],
+#     },
+# }
 
 
-def task_convert_notebooks_to_scripts():
-    """Convert notebooks to script form to detect changes to source code rather
-    than to the notebook's metadata.
-    """
-    build_dir = Path(OUTPUT_DIR)
+# def task_convert_notebooks_to_scripts():
+#     """Convert notebooks to script form to detect changes to source code rather
+#     than to the notebook's metadata.
+#     """
+#     build_dir = Path(OUTPUT_DIR)
 
-    for notebook in notebook_tasks.keys():
-        notebook_name = notebook.split(".")[0]
-        yield {
-            "name": notebook,
-            "actions": [
-                jupyter_clear_output(notebook_name),
-                jupyter_to_python(notebook_name, build_dir),
-            ],
-            "file_dep": [Path("./src") / notebook],
-            "targets": [OUTPUT_DIR / f"_{notebook_name}.py"],
-            "clean": True,
-            "verbosity": 0,
-        }
+#     for notebook in notebook_tasks.keys():
+#         notebook_name = notebook.split(".")[0]
+#         yield {
+#             "name": notebook,
+#             "actions": [
+#                 jupyter_clear_output(notebook_name),
+#                 jupyter_to_python(notebook_name, build_dir),
+#             ],
+#             "file_dep": [Path("./src") / notebook],
+#             "targets": [OUTPUT_DIR / f"_{notebook_name}.py"],
+#             "clean": True,
+#             "verbosity": 0,
+#         }
 
 
 # fmt: off
-def task_run_notebooks():
-    """Preps the notebooks for presentation format.
-    Execute notebooks if the script version of it has been changed.
-    """
-    for notebook in notebook_tasks.keys():
-        notebook_name = notebook.split(".")[0]
-        yield {
-            "name": notebook,
-            "actions": [
-                """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
-                jupyter_execute_notebook(notebook_name),
-                jupyter_to_html(notebook_name),
-                copy_file(
-                    Path("./src") / f"{notebook_name}.ipynb",
-                    OUTPUT_DIR / f"{notebook_name}.ipynb",
-                    mkdir=True,
-                ),
-                jupyter_clear_output(notebook_name),
-                # jupyter_to_python(notebook_name, build_dir),
-                """python -c "import sys; from datetime import datetime; print(f'End """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
-            ],
-            "file_dep": [
-                OUTPUT_DIR / f"_{notebook_name}.py",
-                *notebook_tasks[notebook]["file_dep"],
-            ],
-            "targets": [
-                OUTPUT_DIR / f"{notebook_name}.html",
-                OUTPUT_DIR / f"{notebook_name}.ipynb",
-                *notebook_tasks[notebook]["targets"],
-            ],
-            "clean": True,
-        }
-# fmt: on
+# def task_run_notebooks():
+#     """Preps the notebooks for presentation format.
+#     Execute notebooks if the script version of it has been changed.
+#     """
+#     for notebook in notebook_tasks.keys():
+#         notebook_name = notebook.split(".")[0]
+#         yield {
+#             "name": notebook,
+#             "actions": [
+#                 """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
+#                 jupyter_execute_notebook(notebook_name),
+#                 jupyter_to_html(notebook_name),
+#                 copy_file(
+#                     Path("./src") / f"{notebook_name}.ipynb",
+#                     OUTPUT_DIR / f"{notebook_name}.ipynb",
+#                     mkdir=True,
+#                 ),
+#                 jupyter_clear_output(notebook_name),
+#                 # jupyter_to_python(notebook_name, build_dir),
+#                 """python -c "import sys; from datetime import datetime; print(f'End """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
+#             ],
+#             "file_dep": [
+#                 OUTPUT_DIR / f"_{notebook_name}.py",
+#                 *notebook_tasks[notebook]["file_dep"],
+#             ],
+#             "targets": [
+#                 OUTPUT_DIR / f"{notebook_name}.html",
+#                 OUTPUT_DIR / f"{notebook_name}.ipynb",
+#                 *notebook_tasks[notebook]["targets"],
+#             ],
+#             "clean": True,
+#         }
+# # fmt: on
 
 
 # ###############################################################
@@ -324,35 +324,35 @@ def task_run_notebooks():
 def task_compile_latex_docs():
     """Compile the LaTeX documents to PDFs"""
     file_dep = [
-        "./reports/report_example.tex",
-        "./reports/my_article_header.sty",
-        "./reports/slides_example.tex",
-        "./reports/my_beamer_header.sty",
-        "./reports/my_common_header.sty",
-        "./reports/report_simple_example.tex",
-        "./reports/slides_simple_example.tex",
-        "./src/example_plot.py",
-        "./src/example_table.py",
+        "./reports/main_report.tex",
+        # "./reports/my_article_header.sty",
+        # "./reports/slides_example.tex",
+        # "./reports/my_beamer_header.sty",
+        # "./reports/my_common_header.sty",
+        # "./reports/report_simple_example.tex",
+        # "./reports/slides_simple_example.tex",
+        # "./src/example_plot.py",
+        # "./src/example_table.py",
     ]
     targets = [
-        "./reports/report_example.pdf",
-        "./reports/slides_example.pdf",
-        "./reports/report_simple_example.pdf",
-        "./reports/slides_simple_example.pdf",
+        "./reports/main_report.pdf",
+        # "./reports/slides_example.pdf",
+        # "./reports/report_simple_example.pdf",
+        # "./reports/slides_simple_example.pdf",
     ]
 
     return {
         "actions": [
             # My custom LaTeX templates
-            "latexmk -xelatex -halt-on-error -cd ./reports/report_example.tex",  # Compile
-            "latexmk -xelatex -halt-on-error -c -cd ./reports/report_example.tex",  # Clean
-            "latexmk -xelatex -halt-on-error -cd ./reports/slides_example.tex",  # Compile
-            "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_example.tex",  # Clean
-            # Simple templates based on small adjustments to Overleaf templates
-            "latexmk -xelatex -halt-on-error -cd ./reports/report_simple_example.tex",  # Compile
-            "latexmk -xelatex -halt-on-error -c -cd ./reports/report_simple_example.tex",  # Clean
-            "latexmk -xelatex -halt-on-error -cd ./reports/slides_simple_example.tex",  # Compile
-            "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_simple_example.tex",  # Clean
+            "latexmk -xelatex -halt-on-error -cd ./reports/main_report.tex",  # Compile
+            "latexmk -xelatex -halt-on-error -c -cd ./reports/main_report.tex",  # Clean
+            # "latexmk -xelatex -halt-on-error -cd ./reports/slides_example.tex",  # Compile
+            # "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_example.tex",  # Clean
+            # # Simple templates based on small adjustments to Overleaf templates
+            # "latexmk -xelatex -halt-on-error -cd ./reports/report_simple_example.tex",  # Compile
+            # "latexmk -xelatex -halt-on-error -c -cd ./reports/report_simple_example.tex",  # Clean
+            # "latexmk -xelatex -halt-on-error -cd ./reports/slides_simple_example.tex",  # Compile
+            # "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_simple_example.tex",  # Clean
             #
             # Example of compiling and cleaning in another directory. This often fails, so I don't use it
             # f"latexmk -xelatex -halt-on-error -cd -output-directory=../_output/ ./reports/report_example.tex",  # Compile
@@ -363,36 +363,36 @@ def task_compile_latex_docs():
         "clean": True,
     }
 
-notebook_sphinx_pages = [
-    "./docs/notebooks/EX_" + notebook.split(".")[0] + ".html"
-    for notebook in notebook_tasks.keys()
-]
-sphinx_targets = [
-    "./docs/index.html",
-    "./docs/myst_markdown_demos.html",
-    "./docs/apidocs/index.html",
-    *notebook_sphinx_pages,
-]
+# notebook_sphinx_pages = [
+#     "./docs/notebooks/EX_" + notebook.split(".")[0] + ".html"
+#     for notebook in notebook_tasks.keys()
+# ]
+# sphinx_targets = [
+#     "./docs/index.html",
+#     "./docs/myst_markdown_demos.html",
+#     "./docs/apidocs/index.html",
+#     *notebook_sphinx_pages,
+# ]
 
-def task_compile_sphinx_docs():
-    """Compile Sphinx Docs"""
-    notebook_scripts = [
-        OUTPUT_DIR / ("_" + notebook.split(".")[0] + ".py")
-        for notebook in notebook_tasks.keys()
-    ]
-    file_dep = [
-        "./README.md",
-        "./pipeline.json",
-        *notebook_scripts,
-    ]
+# def task_compile_sphinx_docs():
+#     """Compile Sphinx Docs"""
+#     notebook_scripts = [
+#         OUTPUT_DIR / ("_" + notebook.split(".")[0] + ".py")
+#         for notebook in notebook_tasks.keys()
+#     ]
+#     file_dep = [
+#         "./README.md",
+#         "./pipeline.json",
+#         *notebook_scripts,
+#     ]
 
-    return {
-        "actions": [
-            "chartbook generate -f",
-        ],  # Use docs as build destination
-        # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
-        "targets": sphinx_targets,
-        "file_dep": file_dep,
-        "task_dep": ["run_notebooks",],
-        "clean": True,
-    }
+#     return {
+#         "actions": [
+#             "chartbook generate -f",
+#         ],  # Use docs as build destination
+#         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
+#         "targets": sphinx_targets,
+#         "file_dep": file_dep,
+#         "task_dep": ["run_notebooks",],
+#         "clean": True,
+#     }
