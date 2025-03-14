@@ -63,11 +63,9 @@ init(autoreset=True)
 
 BASE_DIR = config("BASE_DIR")
 DATA_DIR = config("DATA_DIR")
-# MANUAL_DATA_DIR = config("MANUAL_DATA_DIR")
+
 OUTPUT_DIR = config("OUTPUT_DIR")
-# OS_TYPE = config("OS_TYPE")
-# PUBLISH_DIR = config("PUBLISH_DIR")
-# USER = config("USER")
+
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
@@ -158,6 +156,26 @@ def task_calc_swap_spreads():
         "actions": [
             "ipython ./src/settings.py",
             "ipython ./src/calc_swap_spreads.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": [],
+    }
+
+def task_supplementary():
+    """ """
+    file_dep = [
+        "./src/settings.py",
+        "./src/supplementary.py",
+    ]
+    targets = [
+        OUTPUT_DIR / 'table.txt',
+    ]
+
+    return {
+        "actions": [
+            "ipython ./src/settings.py",
+            "ipython ./src/supplementary.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
