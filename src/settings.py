@@ -71,6 +71,7 @@ d["START_DATE"] = _config("START_DATE", default="1913-01-01", cast=to_datetime)
 d["END_DATE"] = _config("END_DATE", default="2024-01-01", cast=to_datetime)
 
 ## Paths
+d["BASE_DIR"] = _config("BASE_DIR", cast = Path)
 d["DATA_DIR"] = if_relative_make_abs(_config('DATA_DIR', default=Path('_data'), cast=Path))
 d["OUTPUT_DIR"] = if_relative_make_abs(_config('OUTPUT_DIR', default=Path('_output'), cast=Path))
 # fmt: on

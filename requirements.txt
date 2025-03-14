@@ -2,7 +2,7 @@ pandas==2.2.3
 pandas-datareader==0.10.0
 matplotlib==3.9.2
 xbbg==0.7.7
-numpy==1.26.4
+numpy==2.2.3
 python-decouple==3.8
 pytest==8.3.3
 ipython
