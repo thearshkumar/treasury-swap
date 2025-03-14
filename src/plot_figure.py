@@ -1,12 +1,6 @@
 """
-Functions to plot and save them.
+Functions to plot the replicated, updated, and supplementary plots, and save them.
 """
-# one price law
-# in a free market, there shouldn't be a difference
-# there needs to be some sort of variability 
-# we can simulate a free market using a random walk
-# and say that this is how it's supposed to be like
-# in a specific time period of eg 100 days 365 days
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,8 +10,7 @@ from supplementary import *
 output_dir = Path(config("OUTPUT_DIR"))
 
 def plot_figure(arb_df, savePath, end=None):
-
-    """Displaying and saving the plot generated using the data provided.
+    """Creating and saving the plot generated using the data provided.
 
     :param arb_df: DataFrame containing the arbitrage calculations per year
     :type arb_df: pd.DataFrame
@@ -45,8 +38,7 @@ def plot_figure(arb_df, savePath, end=None):
     plt.close()
 
 def plot_supplementary(replication_df, savePath):
-    """
-    Displaying and saving the plot generated using the data provided.
+    """Creating and saving the supplementary plot generated using the data provided.
 
     :param replication_df: DataFrame containing the cleaned treasury and swap data
     :type replication_df: pd.DataFrame
@@ -56,7 +48,7 @@ def plot_supplementary(replication_df, savePath):
     :return: void
     """
     for year in [1,20,2,30,3,5,10]:
-        line1 = plt.plot(np.log(100 * replication_df[f'GT{year} Govt'].dropna()), label = f'{year}Y Treasury', linewidth=1)
+        plt.plot(np.log(100 * replication_df[f'GT{year} Govt'].dropna()), label = f'{year}Y Treasury', linewidth=1)
         plt.plot(np.log(100 * replication_df[f'USSO{year} CMPN Curncy'].dropna()), label = f'{year}Y Swap', linewidth=1)
         plt.title('Treasury and Swap Rates')
         plt.xlabel('Dates')
@@ -68,7 +60,7 @@ def plot_supplementary(replication_df, savePath):
 
 def plot_main():
     """
-    Main function that displays and saves the replicated and updated plots
+    Main function that creates and saves the replicated, updated, and supplementary plots
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -85,9 +77,8 @@ def plot_main():
     rep_df = supplementary_main()
 
     plot_figure(arb_df, os.path.join(output_dir, 'replicated_swap_spread_arb_figure.png'), end)
-
     plot_figure(arb_df, os.path.join(output_dir, 'updated_swap_spread_arb_figure.png'))
-
+    
     plot_supplementary(rep_df, os.path.join(output_dir, 'replication_figure.png'))
 
 if __name__ == '__main__':

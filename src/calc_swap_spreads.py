@@ -1,5 +1,5 @@
 """
-Responsible for calculating the spreads, and saving it.
+Responsible for calculating the spreads, and saving them.
 """
 
 import pandas as pd
@@ -14,8 +14,8 @@ def calc_swap_spreads(treasury_df, swap_df):
 
     :param treasury_df: DataFrame containing the treasury yield data
     :type treasury_df: pd.DataFrame
-    :param treasury_df: Path for saving the plot
-    :type treasury_df: pd.DataFrame
+    :param swap_df: DataFrame containing the swap yield data
+    :type swap_df: pd.DataFrame
     :return: The merged data frame containing the clean and calculated data
     :rtype: pd.DataFrame
     """
