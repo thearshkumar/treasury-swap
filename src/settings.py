@@ -65,32 +65,16 @@ d = {}
 
 d["OS_TYPE"] = get_os()
 
-# Absolute path to root directory of the project
-d["BASE_DIR"] = Path(__file__).absolute().parent.parent
-
 # fmt: off
 ## Other .env variables
 d["START_DATE"] = _config("START_DATE", default="1913-01-01", cast=to_datetime)
 d["END_DATE"] = _config("END_DATE", default="2024-01-01", cast=to_datetime)
-# d["PIPELINE_DEV_MODE"] = _config("PIPELINE_DEV_MODE", default=True, cast=bool)
-# d["PIPELINE_THEME"] = _config("PIPELINE_THEME", default="pipeline")
 
 ## Paths
+d["BASE_DIR"] = _config("BASE_DIR", cast = Path)
 d["DATA_DIR"] = if_relative_make_abs(_config('DATA_DIR', default=Path('_data'), cast=Path))
-# d["MANUAL_DATA_DIR"] = if_relative_make_abs(_config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
 d["OUTPUT_DIR"] = if_relative_make_abs(_config('OUTPUT_DIR', default=Path('_output'), cast=Path))
-# d["PUBLISH_DIR"] = if_relative_make_abs(_config('PUBLISH_DIR', default=Path('_output/publish'), cast=Path))
 # fmt: on
-
-
-## Name of Stata Executable in path
-if d["OS_TYPE"] == "windows":
-    d["STATA_EXE"] = _config("STATA_EXE", default="StataMP-64.exe")
-elif d["OS_TYPE"] == "nix":
-    d["STATA_EXE"] = _config("STATA_EXE", default="stata-mp")
-else:
-    raise ValueError("Unknown OS type")
-
 
 def config(*args, **kwargs):
     key = args[0]

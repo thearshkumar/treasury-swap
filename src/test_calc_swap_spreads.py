@@ -7,7 +7,8 @@ from calc_swap_spreads import *
 from pull_bloomberg import *
 
 def test_calc_swap_spreads():
-    """Checking Column Names
+    """Tests calc_swap_spreads to ensure that the output dataframe
+    has the correct data in it.
     """
 
     raw_syields = pull_raw_syields()
@@ -23,8 +24,6 @@ def test_calc_swap_spreads():
         total_list.append(f'Arb_Swap_{year}')
     for year in years:
         total_list.append(f'tswap_{year}_rf')
-    print(total_list)
-    print([a for a,_ in output.columns])
     assert [a for a,_ in output.columns] == total_list
     
 def test_swap_main():
