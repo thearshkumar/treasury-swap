@@ -2,6 +2,8 @@
 """
 from plot_figure import *
 from pandas.tseries.offsets import DateOffset
+import matplotlib
+matplotlib.use('Agg')
 
 output_dir = Path(config("OUTPUT_DIR"))
 
