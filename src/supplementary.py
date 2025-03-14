@@ -7,12 +7,6 @@ from settings import config
 
 OUTPUT_DIR = config('OUTPUT_DIR')
 
-# Assumption: Swap and treasury can both be entered for the same floating rate.
-# Swap on SOFR
-# Assumption is that floating rate repo on treasury is the same as SOFR (or whatever the swap floating rate is - which is almost never going to be the case)
-# However, if this was the case, then we would say that 'borrowing' the treasury on a repo exactly replicates the payoff of the swap if the swap rate is the same as
-# The coupon on the treasury (if they have the same coupon structure)
-
 def replication_df(treasury_df, swap_df):
     """Creates a merged DataFrame of the treasury and swap yields
     :param treasury_df: DataFrame containing the treasury yield data

@@ -15,12 +15,12 @@
 \geometry{margin=1in}
 
 % Changes required
-% Please add dates wherever you can find a placeholder
-% Please add text which explains sections a bit more in detail
-% Please add text in overview.ipynb
-% Please run this code in a new conda environment by creating it and then installing requirements.
-% Please run doit and check for any improvements that might be required
-% Please add supplementary tests
+% X Please add dates wherever you can find a placeholder 
+% X Please add text which explains sections a bit more in detail
+% X Please add text in overview.ipynb
+%   Please run this code in a new conda environment by creating it and then installing requirements.
+%   Please run doit and check for any improvements that might be required
+% X Please add supplementary tests
 
 
 \title{Treasury Swap Spreads Replication}
@@ -51,7 +51,7 @@ All data for this project was sourced from Bloomberg using the xbbg Python packa
     \item Treasury-Eurodollar (TED) spread as a market-wide indicator of funding conditions
 \end{itemize}
 
-The data spans from January 2010 to DATE_HERE, which includes the period examined in the original paper.
+The data spans from January 2010 to the current date (\today), which includes the period examined in the original paper.
 
 \subsection{Successes}
 
@@ -72,7 +72,7 @@ Our implementation achieved several key successes:
 We encountered several challenges during the replication process:
 
 \begin{itemize}
-    \item \textbf{Data availability}: Bloomberg data for 20-year Treasury yields was not available for the full range of dates in the original paper, particularly before DATE_HERE. This gap means that the replicated figure is not exactly replicated as in the paper.
+    \item \textbf{Data availability}: Bloomberg data for 20-year Treasury yields was not available for the full range of dates in the original paper, particularly before 2020. This gap means that the replicated figure is not exactly replicated as in the paper.
     
     \item \textbf{Methodology alignment}: While the paper described its methodology for calculating the spreads, some implementation details required careful interpretation to ensure our calculations matched those in the original research.
     
@@ -87,22 +87,22 @@ We encountered several challenges during the replication process:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{replicated_swap_spread_arb_figure.png}
-    \caption{Treasury swap spreads from January 2010 to DATE_HERE, approximating the plot in the paper.}
+    \caption{Treasury swap spreads from January 2010 to \today approximating the plot in the paper.}
     \label{fig:treasury_swap_spreads_replicated}
 \end{figure}
 
-Our replication of the Treasury swap spreads from the original paper shows the time series of spreads across different maturities, highlighting the persistent nature of these arbitrage opportunities over time. The visualization demonstrates significant variation both across maturities and over time. Notably, longer-term spreads (20Y and 30Y) display consistently higher values than shorter-term spreads, suggesting structural differences in arbitrage opportunities across the yield curve.
+Our replication of the Treasury swap spreads from the original paper shows the time series of spreads across different maturities, highlighting the persistent nature of these arbitrage opportunities over time. The visualization demonstrates significant variation both across maturities and over time. Notably, longer-term spreads (20Y and 30Y) display consistently higher values than shorter-term spreads, suggesting structural differences in arbitrage opportunities across the yield curve. 
 
 \subsection{Updated Plot}
 % Updated plot
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{updated_swap_spread_arb_figure.png}
-    \caption{Updated plot with data from January 2010 to DATE_HERE.}
+    \caption{Updated plot with data from January 2010 to \today.}
     \label{fig:treasury_swap_spreads_updated}
 \end{figure}
 
-Please add some text here.
+In these plots, a few assumptions lead to the conclusion that arbitrage opportunities are present. For context, the arbitrage opportunity presents itsefl as follows. If the treasury yield is higher than the swap rate, an investor may repo a treasury, thus receiving a high fixed rate and paying the overnight repo rate. Simultaneously, this investor would enter a swap in which they pay fixed and receive the floating overnight interest rate. Hence, the assumption is that the investor would get to pocket the difference in rates between the treasury yield and the swap rate, while the overnight floating rates would net each other out. As such, anywhere that the treasury yield is higher than the swap rate (which is represented by a negative spread in the figures above) is an arbitrage. It is important to acknowledge that this is only the case if the repo rate on the treasury is not significantly larger than the floating rate on the swap. The author of the paper addresses this with the assumption that since a repo is securitized, it is safe to assume that the floating rate the investor pays will not exceed the floating rate they receive \citet{NBERw30561}.
 
 \subsection{Supplementary Analysis}
 
@@ -110,14 +110,14 @@ Please add some text here.
 \begin{table}
     \centering
     \input{../_output/table.txt}
-    \caption{Each number represents the mean spread between the swap rate and the treasury. This figure being negative represents the presense of an arbitrage opportunity.}
+    \caption{Each number represents the mean spread between the swap rate and the treasury. This figure being negative represents the presense of an arbitrage opportunity as discussed.}
 \end{table}
 
 % Plot containing 1Y Treasury and swap
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{replication_figure1.png}
-    \caption{Variation in treasury(1Y) and swap yields over time from DATE_HERE to DATE_HERE.}
+    \caption{Variation in treasury(1Y) and swap yields over time from January 2010 to \today.}
     \label{fig:treasury_swap_spreads_supplementary1}
 \end{figure}
 
@@ -125,11 +125,11 @@ Please add some text here.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{replication_figure30.png}
-    \caption{Variation in treasury(1Y) and swap yields over time from DATE_HERE to DATE_HERE.}
+    \caption{Variation in treasury(1Y) and swap yields over time from January 2010 to \today.}
     \label{fig:treasury_swap_spreads_supplementary30}
 \end{figure}
 
-Please add some text here.
+The two supplementary figures show the yields and swap rates for securities with a 1 year and 30 year tenor, respectively, across the last 15 years. With the assumptions made in the paper that the treasury repo rate will be lower than the floating rate in the swap, anywhere that the treasury yield exceeds the swap rate represents a point when holding the treasury super replicates receiving fixed in a swap of the same tenor \citet{NBERw30561}. Especially for the 30 year figure, these replicating portfolios have a large divergence from one another, with the treasury yield exceeding the swap rate for a significant time period, implying arbitrage opportunities.
 
 \section{Discussion of Findings}
 
