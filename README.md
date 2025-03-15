@@ -8,8 +8,10 @@ replicates the treasury swap figure from the paper, [Segmented Arbitrage](https:
 
 ## Quick Start
 
-To quickest way to run code in this repo is to use the following steps. First, you must have the `conda`  
-package manager installed (e.g., via Anaconda). However, I recommend using `mamba`, via [miniforge]
+Running this repository requires you to have access to Bloomberg. Automated data pulls for recreating the plots and data 
+would only work with the bloomberg-enabled machines.
+The quickest way to run code in this repo is to use the following steps. First, you must have the `conda`  
+package manager installed (e.g., via Anaconda). However, we recommend using `mamba`, via [miniforge]
 (https://github.com/conda-forge/miniforge) as it is faster and more lightweight than `conda`. Second, you 
 must have TexLive (or another LaTeX distribution) installed on your computer and available in your path.
 You can do this by downloading and 
@@ -25,6 +27,7 @@ and then install the dependencies with pip
 ```
 pip install -r requirements.txt
 ```
+then you would need to create a .env file as shown in .env.example and fill in your specific values.
 Finally, you can then run 
 ```
 doit
